@@ -52,7 +52,6 @@
 # if __name__ == '__main__':
 #     main()
 
-
 import streamlit as st
 import numpy as np
 import pandas as pd
@@ -82,70 +81,98 @@ def prediction(input_data):
         return 'Developing'
 
 def main():
-    # Main container for styling
+    # Custom styles for better aesthetics
     st.markdown(
         """
         <style>
-        .main {
-            background-color: #f5f7fa;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .header-title {
+        body {
+            background-color: #eef2f3;
             font-family: 'Arial', sans-serif;
-            font-size: 32px;
+        }
+        .main-container {
+            max-width: 800px;
+            margin: auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 36px;
             color: #2a5d84;
-            text-align: center;
-            margin-bottom: 10px;
         }
-        .subheader {
-            font-family: 'Arial', sans-serif;
-            font-size: 20px;
+        .header p {
+            font-size: 18px;
             color: #555555;
+        }
+        .form-container {
+            margin-top: 20px;
+        }
+        .form-container .stButton button {
+            background-color: #2a5d84;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        .form-container .stButton button:hover {
+            background-color: #1d4c6b;
+        }
+        .result {
             text-align: center;
-            margin-bottom: 30px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #2a5d84;
+            margin-top: 30px;
         }
         </style>
-        <div class="main">
-            <h1 class="header-title">HELP International Foundation</h1>
-            <p class="subheader">This application provides the status of a country based on socio-economic factors.</p>
+        <div class="main-container">
+            <div class="header">
+                <h1>HELP International Foundation</h1>
+                <p>Predict the status of a country based on socio-economic factors</p>
+            </div>
         </div>
         """,
         unsafe_allow_html=True
     )
 
-    # Input fields with grouping and styling
+    # Input form
     with st.form(key='input_form'):
-        st.markdown("### Input Socio-Economic Data")
+        st.markdown("### Input Socio-Economic Data", unsafe_allow_html=True)
         st.write("Provide the required socio-economic metrics below:")
 
-        col1, col2, col3 = st.columns(3)
+        # Organize input fields into two columns
+        col1, col2 = st.columns(2)
 
         with col1:
             ch_mort = st.text_input('Child Mortality Rate:', '')
             exp = st.text_input('Exports (% GDP):', '')
             imp = st.text_input('Imports (% GDP):', '')
+            hel = st.text_input('Expenditure on Health (% GDP):', '')
 
         with col2:
-            hel = st.text_input('Expenditure on Health (% GDP):', '')
             inc = st.text_input('Average Income:', '')
             inf = st.text_input('Inflation:', '')
-
-        with col3:
             life_exp = st.text_input('Life Expectancy:', '')
             fer = st.text_input('Fertility Rate:', '')
             gdp = st.text_input('GDP per Population:', '')
 
         input_list = [[ch_mort, exp, hel, imp, inc, inf, life_exp, fer, gdp]]
 
-        submit_button = st.form_submit_button(label='Predict', help="Click to predict the country's development status.")
+        # Submit button
+        submit_button = st.form_submit_button(label='Predict')
 
         if submit_button:
             with st.spinner('Analyzing data and predicting...'):
                 response = prediction(input_list)
-            st.success(f"The predicted status of the country is: **{response}**")
+            st.markdown(f"<div class='result'>The predicted status of the country is: {response}</div>", unsafe_allow_html=True)
 
 if __name__ == '__main__':
     main()
+
 
